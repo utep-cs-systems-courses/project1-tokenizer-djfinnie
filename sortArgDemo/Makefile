@@ -1,4 +1,3 @@
-OBJS= tokenizer.o 
 
 # compiler flags.  -g for debug, -O3 for optimization
 CFLAGS=-g -O3
