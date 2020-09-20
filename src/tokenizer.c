@@ -1,5 +1,5 @@
 #include "tokenizer.h"
-#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 
@@ -37,49 +37,45 @@ int non_space_char(char c)
    space-separated word in zero-terminated str.  Return a zero pointer if 
 
    str does not contain any words. */
-
 char *word_start(char *str)
 {
-  char* p = str;
-  while (space_char(p[0]))
+  int i;
+  char *p = str;
+  
+  for (i = 0; *(p+i) != '\0'; i++)
     {
-      if (non_space_char(p[0])) return p;
-      *p++;
+      if (non_space_char(*(p+i))) return p+i;
     }
-  return p;
+  return p+i;
 }
 
 /* Returns a pointer terminator char following *word */
 
 char *word_terminator(char *word)
 {
+  int i;
   char *p = word;
-  while (p[0] != 0)
+
+  for (i = 0; *(p+i) != '\0'; i++)
     {
-      *p++;
+      if (space_char(*(p+i))) return p+i;
     }
-  return p;
-} 
-
-
+  return p+i;
+}
 
 /* Counts the number of words in the string argument. */
 
 int count_words(char *str)
 {
-  char *p = str;
   int num_words = 0;
-  char *term = *word_terminator(&p[0]);
-  while (*p != *term)
+  char *p = word_start(str);
+
+  while (*p != '\0')
     {
-      if (*word_start(&p[0]) != *term)
-	{
-	  num_words++;
-	  while (non_space_char(p[0]))
-	    {
-	      *p++;
-	    }
-	}
+    if (non_space_char(*p)) num_words += 1;
+    
+    p = word_terminator(p);
+    p = word_start(p); 
     }
   return num_words;
 }
@@ -91,9 +87,19 @@ int count_words(char *str)
 
     containing <len> chars from <inStr> */
 
-char *copy_str(char *inStr, short len);
+char *copy_str(char *inStr, short len)
+{
+  int i;
+  char *copy = malloc((len+1) * sizeof(char));
 
-
+  for (i = 0; i < len; i++)
+    {
+      copy[i] = inStr[i]; 
+    }
+  
+  copy[i] = '\0';
+  return copy;
+}
 
  /* Returns a freshly allocated zero-terminated vector of freshly allocated 
 
@@ -111,17 +117,46 @@ char *copy_str(char *inStr, short len);
 
  */
 
-char **tokenize(char* str);
+char **tokenize(char* str)
+{
+  char *p = str;
+  int num_words = count_words(str);
+  char **tokens = malloc((num_words+1) * sizeof(char *));
+  int i;
+
+  for (i = 0; i < num_words; i++)
+    {
+      p = word_start(p); 
+      char *start = p;
+      char *end = word_terminator(start);
+      int length = start -end;
+      
+      tokens[i] = copy_str(p, length); 
+
+      p = word_terminator(p); 
+    }
+  
+  tokens[i] = 0; 
+  return tokens;
+}
 
 
 
  /* Prints all tokens. */
 
- void print_tokens(char **tokens);
+ void print_tokens(char **tokens)
+ {
+   for (int i = 0; tokens[i] != 0; i++) {
+
+     printf("%s ",tokens[i]);
+   }
+ }
 
 
 
  /* Frees all tokens and the vector containing themx. */
 
- void free_tokens(char **tokens);
-
+ void free_tokens(char **tokens)
+ {
+   
+ }
