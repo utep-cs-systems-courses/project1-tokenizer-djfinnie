@@ -13,7 +13,7 @@
 
 int space_char(char c)
 {
-  if (c < '!') return 1;
+  if (c < '!' && c != 0) return 1;  // All whitespace character values are less than '!'
   else return 0;
 }
 
@@ -146,7 +146,8 @@ char **tokenize(char* str)
 
  void print_tokens(char **tokens)
  {
-   for (int i = 0; tokens[i] != 0; i++) {
+   int i;
+   for (i = 0; tokens[i] != 0; i++) {
 
      printf("%s ",tokens[i]);
    }
@@ -158,5 +159,11 @@ char **tokenize(char* str)
 
  void free_tokens(char **tokens)
  {
-   
+   int i;
+
+   for (i = 0; tokens[i] != 0; i++)
+     {
+       free(tokens[i]); 
+     }
+   free(tokens);      
  }
