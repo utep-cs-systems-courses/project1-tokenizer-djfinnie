@@ -1,5 +1,5 @@
-src: tokenizer.o uimain.o
-	cc -o src tokenizer.o uimain.o
+src: tokenizer.o uimain.o history.o 
+	cc -o src tokenizer.o uimain.o history.o
 
 clean:
 	rm -f *.o src

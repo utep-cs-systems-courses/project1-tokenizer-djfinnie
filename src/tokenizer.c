@@ -44,7 +44,7 @@ char *word_start(char *str)
   
   for (i = 0; *(p+i) != '\0'; i++)
     {
-      if (non_space_char(*(p+i))) return p+i;
+      if (non_space_char(*(p+i))) return p+i; // Return pointer of first found character
     }
   return p+i;
 }
@@ -58,7 +58,7 @@ char *word_terminator(char *word)
 
   for (i = 0; *(p+i) != '\0'; i++)
     {
-      if (space_char(*(p+i))) return p+i;
+      if (space_char(*(p+i))) return p+i;  // Return pointer of first space character found
     }
   return p+i;
 }
@@ -72,10 +72,10 @@ int count_words(char *str)
 
   while (*p != '\0')
     {
-    if (non_space_char(*p)) num_words += 1;
+      if (non_space_char(*p)) num_words += 1;  // Add one to num_words if a letter is read
     
-    p = word_terminator(p);
-    p = word_start(p); 
+      p = word_terminator(p);  // Skip to end of the word
+      p = word_start(p);       // Skip to next word     
     }
   return num_words;
 }
@@ -90,14 +90,14 @@ int count_words(char *str)
 char *copy_str(char *inStr, short len)
 {
   int i;
-  char *copy = malloc((len+1) * sizeof(char));
+  char *copy = malloc((len+1) * sizeof(char));  // Allocate memory for new string of chars
 
   for (i = 0; i < len; i++)
     {
-      copy[i] = inStr[i]; 
+      copy[i] = inStr[i];   // Fill new char pointer addresses with inStr chars 
     }
   
-  copy[i] = '\0';
+  copy[i] = '\0';           // Make last char the terminating variable
   return copy;
 }
 
@@ -121,22 +121,27 @@ char **tokenize(char* str)
 {
   char *p = str;
   int num_words = count_words(str);
-  char **tokens = malloc((num_words+1) * sizeof(char *));
+  
+  // Use number of words and size of char * to store tokenized word 
+  char **tokens = malloc((num_words+1) * sizeof(char *)); 
   int i;
 
   for (i = 0; i < num_words; i++)
     {
-      p = word_start(p); 
-      char *start = p;
-      char *end = word_terminator(start);
-      int length = start -end;
+      p = word_start(p);               // Go to word start
+      int j;
+      int length= 0;
+      for (j = 0; *(p+j) != '\0'; j++) // Get the lenght of the current word
+	{
+	  length++;
+	}
       
-      tokens[i] = copy_str(p, length); 
+      tokens[i] = copy_str(p, length); // Copy string into token array 
 
-      p = word_terminator(p); 
+      p = word_terminator(p);          // Go to end of word
     }
   
-  tokens[i] = 0; 
+  tokens[i] = 0;                       // Set last token as terminator
   return tokens;
 }
 
@@ -163,7 +168,7 @@ char **tokenize(char* str)
 
    for (i = 0; tokens[i] != 0; i++)
      {
-       free(tokens[i]); 
+       free(tokens[i]);             // Free all allocated memory for tokens
      }
    free(tokens);      
  }
