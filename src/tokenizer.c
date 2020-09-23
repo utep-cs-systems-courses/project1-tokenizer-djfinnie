@@ -69,14 +69,17 @@ int count_words(char *str)
 {
   int num_words = 0;
   char *p = word_start(str);
-
-  while (*p != '\0')
+  int i;
+  
+  for (i = 0; *(str +i) != '\0'; i++)
     {
-      if (non_space_char(*p)) num_words += 1;  // Add one to num_words if a letter is read
+      if (non_space_char(*(str+i))) num_words += 1;  // Add one to num_words if a letter is read
     
       p = word_terminator(p);  // Skip to end of the word
       p = word_start(p);       // Skip to next word     
     }
+      
+
   return num_words;
 }
 	  
@@ -154,7 +157,7 @@ char **tokenize(char* str)
    int i;
    for (i = 0; tokens[i] != 0; i++) {
 
-     printf("%s ",tokens[i]);
+     printf("%s ",tokens[i]);       // Print every token
    }
  }
 

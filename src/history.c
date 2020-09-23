@@ -30,7 +30,7 @@ void add_history(List *list, char *str)
     id++;                  // Get id for new last item
     }
 
-  short len = 0;
+  int len = 0;
   int i;
   for (i = 0; *(str +i) != '\0'; i++)
     {
@@ -57,7 +57,7 @@ char *get_history(List *list, int id)
       if (temp->id == id) return temp->str; // If id is found return string within node
 	temp = temp->next;
     }
-  return "No item in list with inputted id";
+  return "\0";                              // Id not found
 }
 
 
@@ -70,7 +70,7 @@ void print_history(List *list)
   
   while (temp != 0)
     {
-      printf("%d. %s", temp->id, temp->str); // Print id and string within each node
+      printf("%d %s", temp->id, temp->str); // Print id and string within each node
       temp = temp->next;
     }
 }

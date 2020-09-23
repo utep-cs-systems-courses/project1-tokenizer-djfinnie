@@ -5,7 +5,7 @@
 
 int main()
 {
-  char input[100];
+  char input[500];
 
   List *list = init_history();
 
@@ -17,12 +17,12 @@ int main()
 
     printf("1.Enter 'i' to add a sentence to history\n");
     printf("2.Enter 'h' to view all history\n");
-    printf("3.Enter '@' followed by a list id number to recall history stored at that point.\n");
+    printf("3.Enter '!' followed by a list id number to recall history stored at that point.\n");
     printf("4.Enter 'q' to quit and clear history\n");
 
     printf(">$");
 
-    fgets(input, 100, stdin);
+    fgets(input, 500, stdin);
     char *history;
     char **tokens;
 
@@ -48,12 +48,13 @@ int main()
         break;
 
 	// Get string stored at inputted id
-       case '@':
+       case '!':
 	 history = get_history(list,atoi(input+1));
-  	 tokens = tokenize(history);
+	 tokens = tokenize(history);
 
-         printf("Retrieved history: %s\n", history);
+         printf("\nRetrieved history: %s\n", history);
 	 printf("Retrieved history tokenized:\n");
+	 if (*history == '\0') printf("\n------------No history stored at this id!-----------\n");
 
          print_tokens(tokens);
  	 free_tokens(tokens);
